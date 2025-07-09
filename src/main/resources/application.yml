@@ -1,0 +1,16 @@
+spring:
+  ai:
+    dashscope:
+      api-key: ${AI_DASHSCOPE_API_KEY}
+      chat:
+        options:
+          model: deepseek-r1
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/chatMemory?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: 123456
+
+server:
+  port: 8080
