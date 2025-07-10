@@ -5,6 +5,12 @@ spring:
       chat:
         options:
           model: deepseek-r1
+    openai:
+      api-key: sk-9u6ZLIknSoJmQUCzGdbTFHclvBjkHrNJP7k78lkM1iEWUWdF
+      base-url: https://api.chatanywhere.tech
+    deepseek:
+      api-key: sk-57dacaf225364380925bc76d7af4bb1f
+      base-url: https://api.deepseek.com/
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
