@@ -50,7 +50,12 @@ public ChatClient ailbabaChatClient(JdbcTemplate jdbcTemplate, @Qualifier("dashs
             .defaultSystem("你是一个专业的助手，语言简洁")
             .defaultAdvisors(new SimpleLoggerAdvisor())
             // 注册Advisor
-            .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+//            .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+            .defaultAdvisors(
+                    a -> a
+                            .param(ChatMemory.CONVERSATION_ID, "1")
+
+            )
             .defaultOptions(
                     DashScopeChatOptions.builder()
                             .withTopP(0.7)

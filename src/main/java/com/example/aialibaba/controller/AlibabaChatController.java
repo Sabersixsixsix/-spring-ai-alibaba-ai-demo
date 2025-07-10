@@ -1,11 +1,10 @@
 package com.example.aialibaba.controller;
 
+import com.alibaba.cloud.ai.dashscope.api.DashScopeImageApi;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.image.Image;
-import org.springframework.ai.image.ImagePrompt;
-import org.springframework.ai.image.ImageResponse;
+import org.springframework.ai.image.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
@@ -23,6 +22,9 @@ public class AlibabaChatController {
     @Qualifier("ailbabaChatClient")
     private ChatClient chatClient;
 
+    @Autowired
+    @Qualifier("dashScopeImageModel")
+    private ImageModel imageModel;
 
     @GetMapping("/simple/chat")
     public String simpleChat(@RequestParam(value = "query", defaultValue = "你好，很高兴认识你，能简单介绍一下自己吗？") String query) {
@@ -48,6 +50,16 @@ public class AlibabaChatController {
         return chatClient.prompt(query)
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, chatId))
                 .call().content();
+    }
+
+    @GetMapping("/image")
+    String getImage(@RequestParam(value = "prompt") String prompt) {
+        ImageOptions options = ImageOptionsBuilder.builder()
+                .model("wanx2.1-t2i-turbo")
+                .build();
+        ImagePrompt imagePrompt = new ImagePrompt(prompt, options);
+        ImageResponse imageResponse = imageModel.call(imagePrompt);
+        return imageResponse.getResult().getOutput().getUrl();
     }
 
 }

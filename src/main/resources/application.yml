@@ -8,6 +8,10 @@ spring:
     openai:
       api-key: sk-9u6ZLIknSoJmQUCzGdbTFHclvBjkHrNJP7k78lkM1iEWUWdF
       base-url: https://api.chatanywhere.tech
+      image:
+        options:
+          model: gpt-4-dalle
+          n: 1
     deepseek:
       api-key: sk-57dacaf225364380925bc76d7af4bb1f
       base-url: https://api.deepseek.com/
