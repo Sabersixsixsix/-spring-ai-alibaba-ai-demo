@@ -1,6 +1,8 @@
 package com.example.aialibaba.controller;
 
 import com.example.aialibaba.dao.actorDao;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -34,6 +36,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/api")
+@Tag(name = "OpenAi对话")
 public class OpenAiChatController {
     @Autowired
     @Qualifier("openAiChatClient")
@@ -50,6 +53,7 @@ public class OpenAiChatController {
     /**
      * deepseek
      */
+    @Operation(summary = "简单对话")
     @GetMapping("/deepseek/{msg}")
     String deepSeek(@PathVariable String msg) {
         String response = deepSeekChatModel.call( msg);
@@ -59,6 +63,7 @@ public class OpenAiChatController {
     /**
      * 拦日志截器
      */
+    @Operation(summary = "后台输出日志的简单对话")
     @GetMapping("/ai/{userInput}")
     String generation(@PathVariable String userInput) {
         SimpleLoggerAdvisor customLogger = new SimpleLoggerAdvisor(
@@ -76,6 +81,7 @@ public class OpenAiChatController {
     /**
      * 填充为实体类型
      */
+    @Operation(summary = "填充到实体类")
     @GetMapping("/actor")
     String getActor() {
         actorDao actor = chatClient.prompt()
@@ -88,6 +94,7 @@ public class OpenAiChatController {
     /**
      * 填充为带泛型的复杂类型
      */
+    @Operation(summary = "填充到自定义类型")
     @GetMapping("/films")
     List<actorDao> getFilms() {
         List<actorDao> actorFilms = chatClient.prompt()
@@ -100,6 +107,7 @@ public class OpenAiChatController {
     /**
      * 图片分析
      */
+    @Operation(summary = "图片分析")
     @GetMapping("/qp")
     String getQP() {
         String response = chatClient.prompt()
@@ -122,6 +130,7 @@ public class OpenAiChatController {
     /**
      * 生成图像
      */
+    @Operation(summary = "绘图")
     @GetMapping("/image")
     public String image(@RequestParam(value = "prompt", defaultValue = "A sexy girl upon the sea") String prompt) {
         ImageResponse imageResponse = openAiImageModel.call(
@@ -138,6 +147,7 @@ public class OpenAiChatController {
     /**
      * 生成图像并保存
      */
+    @Operation(summary = "绘图并保存")
     @GetMapping("/imagesv")
     public String imagesv(@RequestParam(value = "prompt", defaultValue = "Saber from Fate") String prompt,
                           HttpServletResponse response) {

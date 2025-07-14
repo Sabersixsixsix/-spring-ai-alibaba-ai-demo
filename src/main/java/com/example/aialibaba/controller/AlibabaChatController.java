@@ -1,6 +1,8 @@
 package com.example.aialibaba.controller;
 
 import com.alibaba.cloud.ai.dashscope.api.DashScopeImageApi;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -16,6 +18,7 @@ import reactor.core.publisher.Flux;
 
 @RestController
 @RequestMapping("/alibaba")
+@Tag(name = "阿里云对话")
 public class AlibabaChatController {
 
     @Autowired
@@ -26,6 +29,7 @@ public class AlibabaChatController {
     @Qualifier("dashScopeImageModel")
     private ImageModel imageModel;
 
+    @Operation(summary = "简单对话")
     @GetMapping("/simple/chat")
     public String simpleChat(@RequestParam(value = "query", defaultValue = "你好，很高兴认识你，能简单介绍一下自己吗？") String query) {
         return chatClient.prompt(query)
@@ -33,6 +37,7 @@ public class AlibabaChatController {
                 .content();
     }
 
+    @Operation(summary = "流式对话")
     @GetMapping(value = "/stream/chat", produces = "text/event-stream;charset=UTF-8")
     Flux<String> stream(@RequestParam(value = "query", defaultValue = "奈斯to秘特油") String query, @RequestParam(value = "mood") String mood ,HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
@@ -43,6 +48,7 @@ public class AlibabaChatController {
                 .content();
     }
 
+    @Operation(summary = "记忆对话，可传入记忆id")
     @GetMapping("/memory/chat")
     public String simpleChat(@RequestParam(value = "query", defaultValue = "我的头有点痛，怎么办")String query,
                              @RequestParam(value = "chat-id", defaultValue = "1") String chatId) {
@@ -52,6 +58,7 @@ public class AlibabaChatController {
                 .call().content();
     }
 
+    @Operation(summary = "绘画")
     @GetMapping("/image")
     String getImage(@RequestParam(value = "prompt") String prompt) {
         ImageOptions options = ImageOptionsBuilder.builder()
