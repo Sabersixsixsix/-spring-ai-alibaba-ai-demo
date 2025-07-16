@@ -1,6 +1,7 @@
 package com.example.aialibaba.controller;
 
 import com.alibaba.cloud.ai.dashscope.api.DashScopeImageApi;
+import com.example.aialibaba.service.InformationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +17,8 @@ import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/alibaba")
 @Tag(name = "阿里云对话")
@@ -28,6 +31,14 @@ public class AlibabaChatController {
     @Autowired
     @Qualifier("dashScopeImageModel")
     private ImageModel imageModel;
+
+    @Autowired
+    private InformationService informationService;
+
+    @GetMapping("/getMsg")
+    public String getMsg() throws IOException {
+        return informationService.getInformation();
+    }
 
     @Operation(summary = "简单对话")
     @GetMapping("/simple/chat")

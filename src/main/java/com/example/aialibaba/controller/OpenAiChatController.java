@@ -1,6 +1,7 @@
 package com.example.aialibaba.controller;
 
 import com.example.aialibaba.dao.actorDao;
+import com.example.aialibaba.service.InformationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,13 +52,26 @@ public class OpenAiChatController {
 
     @Autowired
     private OpenAiImageModel openAiImageModel;
+
+    @Autowired
+    private InformationService informationService;
+
+    /**
+     * 简历信息获取
+     * @return
+     * @throws IOException
+     */
+    @GetMapping("/getMsg")
+    public String getMsg() throws IOException {
+        return informationService.getInformation();
+    }
     /**
      * deepseek
      */
     @Operation(summary = "简单对话")
     @GetMapping("/deepseek/{msg}")
     String deepSeek(@PathVariable String msg) {
-        String response = deepSeekChatModel.call( msg);
+        String response = deepSeekChatModel.call(msg);
         return response;
     }
 
@@ -112,7 +127,22 @@ public class OpenAiChatController {
     String getQP() {
         String response = chatClient.prompt()
                 .user(u -> u.text("介绍一下图片内容")
-                        .media(MimeTypeUtils.IMAGE_PNG, new ClassPathResource("/picture/football.png")))
+                .media(MimeTypeUtils.IMAGE_PNG, new ClassPathResource("/picture/football.png")))
+                .call()
+                .content();
+        return response;
+    }
+
+    /**
+     * url识别图片
+     */
+    @GetMapping("/url")
+    String imageUrl() throws MalformedURLException {
+        URL url = new URL("https://ts1.tc.mm.bing.net/th/id/OIP-C.IggEulKaQSlG5AIZGd16BQHaDt?w=256&h=144&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2");
+        String response = chatClient.prompt()
+                .user(u -> u.text("介绍一下图片内容")
+                        .media(MimeTypeUtils.IMAGE_PNG, url)
+                )
                 .call()
                 .content();
         return response;

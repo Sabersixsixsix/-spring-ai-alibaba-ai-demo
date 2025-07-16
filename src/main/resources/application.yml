@@ -8,6 +8,8 @@ spring:
     openai:
       api-key: sk-9u6ZLIknSoJmQUCzGdbTFHclvBjkHrNJP7k78lkM1iEWUWdF
       base-url: https://api.chatanywhere.tech
+#      api-key: sk-KvxTWiP6zrYOXa8b8f9e461b4d394506BcD89c8964106939
+#      base-url: https://ai.huice.com/one-api
       image:
         options:
           model: gpt-4-dalle
